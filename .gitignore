@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# runtime artifacts, rebuilt by setup + monitoring, never committed.
+# data/seed/ is the committed, token-free seed and stays tracked.
+data/metrics.db
+data/mlflow.db
+data/mlartifacts/
+mlruns/
+data/cache/
+
+# distribution bundles (chips etc.) go to external hosting, not git
+*.tar.gz

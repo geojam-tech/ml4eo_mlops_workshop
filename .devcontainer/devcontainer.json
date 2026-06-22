@@ -1,0 +1,22 @@
+{
+  "name": "ML4EO Workshop",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "jupyter",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [8888, 4200, 3000, 5001],
+  "portsAttributes": {
+    "8888": { "label": "Jupyter Lab",    "onAutoForward": "openBrowser" },
+    "4200": { "label": "Prefect Server", "onAutoForward": "notify" },
+    "3000": { "label": "Grafana",        "onAutoForward": "notify" },
+    "5001": { "label": "MLflow",         "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "cp -n .env.example .env 2>/dev/null; echo 'Ready — open Jupyter (8888), Prefect (4200), or Grafana (3000)'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-toolsai.jupyter",
+        "ms-python.python"
+      ]
+    }
+  }
+}

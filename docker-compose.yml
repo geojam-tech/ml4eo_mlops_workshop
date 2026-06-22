@@ -1,0 +1,102 @@
+services:
+  jupyter:
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/workspace
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PREFECT_API_URL: http://prefect:4200/api
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+    depends_on:
+      - prefect
+      - grafana
+      - mlflow
+
+  prefect:
+    build: .
+    command: uv run prefect server start --host 0.0.0.0
+    ports:
+      - "4200:4200"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - prefect_data:/root/.prefect
+    environment:
+      PREFECT_SERVER_API_HOST: 0.0.0.0
+      PREFECT_API_URL: http://localhost:4200/api
+      PREFECT_UI_API_URL: /api
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4200/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  grafana:
+    image: grafana/grafana-oss:11.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./data:/data
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: workshop
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_INSTALL_PLUGINS: frser-sqlite-datasource
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: frser-sqlite-datasource
+
+  mlflow:
+    build: .
+    # allowed-hosts / cors set to * for the trusted workshop network: the worker
+    # reaches the server as mlflow:5000 and Codespaces forwards a dynamic
+    # hostname, both of which MLflow's DNS-rebind guard blocks by default.
+    # List form keeps the '*' a literal argument (no shell globbing).
+    command:
+      - uv
+      - run
+      - mlflow
+      - server
+      - --host=0.0.0.0
+      - --port=5000
+      - --backend-store-uri=sqlite:////workspace/data/mlflow.db
+      - --artifacts-destination=/workspace/data/mlartifacts
+      - --serve-artifacts
+      - --allowed-hosts=*
+      - --cors-allowed-origins=*
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/workspace
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  worker:
+    build: .
+    command: uv run python -m pipeline.deploy
+    volumes:
+      - .:/workspace
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PREFECT_API_URL: http://prefect:4200/api
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+    depends_on:
+      prefect:
+        condition: service_healthy
+      mlflow:
+        condition: service_healthy
+
+volumes:
+  prefect_data:

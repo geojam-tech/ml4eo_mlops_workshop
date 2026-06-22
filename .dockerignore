@@ -1,0 +1,21 @@
+# Keep the build context small and never copy a host venv over the image's baked
+# one (its interpreter symlinks are host paths and would force a full re-sync at
+# container start). data/seed/ is the committed token-free seed and stays.
+.venv/
+.git/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.env
+
+# runtime artifacts, rebuilt by setup + monitoring
+data/cache/
+data/metrics.db
+data/mlflow.db
+data/mlartifacts/
+data/thumbnails/
+mlruns/
+
+# distribution bundles (chips etc.) are fetched at runtime, not baked in
+*.tar.gz
