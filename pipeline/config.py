@@ -33,7 +33,7 @@ PORT_GEOJSON = {
 # Default monitoring window, used only as the flow's default parameters. The
 # flow processes whatever window it is given.
 DATE_START = "2021-02-01"
-DATE_END = "2023-02-28"
+DATE_END = "2024-02-28"
 
 # Keep a scene if its footprint covers at least this fraction of PORT_BBOX.
 COVERAGE_THRESHOLD = float(os.getenv("COVERAGE_THRESHOLD", "0.9"))
