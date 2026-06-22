@@ -120,11 +120,11 @@ ML4EO/
 
 ## Background
 
-The Primorsk oil terminal is Russia's largest Baltic oil port. The two-year window (Feb 2021 to Feb 2023) spans three events of interest, each falling within the data:
+The Primorsk oil terminal is Russia's largest Baltic oil port. The three-year window (Feb 2021 to Feb 2024) spans three events of interest, each falling within the data:
 
 1. **Sentinel-1B end of mission** (December 2021). Sentinel-1B suffered a power-supply anomaly on 23 December 2021 and ESA formally ended the mission in August 2022 ([ESA / Copernicus Sentinel Online, 2022](https://sentinels.copernicus.eu/-/end-of-mission-of-the-copernicus-sentinel-1b-satellite)). A sensor change to account for, not to read as a change in vessel behaviour.
 2. **Invasion of Ukraine** (February 2022). AIS counts and the fleet composition shift around this date. It also sits inside the ratio's seasonal cycle, so separate season from event before attributing anything.
-3. **EU crude oil embargo** (December 2022). Around this period the AIS source also switches — GFW moved from OrbComm to Spire on 1 January 2023 — a data-pipeline discontinuity that overlaps the window.
+3. **EU crude oil embargo** (December 2022, effect through 2023). The seaborne crude ban took effect on 5 December 2022, but the *observable* shift at Primorsk — rerouting and the shadow-fleet ramp, visible in the rise of Gabon- and Cook Islands-flagged tankers — lags well into 2023. That lag is the reason the window runs a third year: the policy date is not when the signal moves. Around the same time the AIS source also switches — GFW moved from OrbComm to Spire on 1 January 2023 — a data-pipeline discontinuity that overlaps the window.
 
 The monitoring framework does not try to explain these. It flags them. Telling "the detector changed" from "the world changed" from "the pipeline changed" is the core teaching point.
 
