@@ -7,6 +7,7 @@ and the flow fetches one day at a time, caching as it goes.
 
 import json
 import time
+from datetime import datetime, timedelta
 
 import pystac_client
 import planetary_computer
@@ -98,10 +99,16 @@ def _gfw_4wings(geojson, date_start, date_end, temporal="DAILY", spatial="HIGH")
 def fetch_ais_day(geojson, day):
     """Vessel presence inside the polygon for a single day.
 
-    Returns (n_vessels, records) where records is a list of
-    (vesselId, day, shipName, flag, vesselType, hours).
+    GFW's 4Wings report returns nothing for a degenerate single-day range
+    (date-range=day,day). The range is end-exclusive, so we ask for
+    [day, day+1) to get that day's records. This is not forward-looking for a
+    live pipeline: a scene's day is already complete by the time it's processed
+    (Sentinel-1 and AIS both land with a lag), and day+1 is only the exclusive
+    upper bound, not future data. Returns (n_vessels, records) where records is
+    a list of (vesselId, day, shipName, flag, vesselType, hours).
     """
-    result = _gfw_4wings(geojson, day, day, temporal="DAILY", spatial="HIGH")
+    nxt = (datetime.strptime(day, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+    result = _gfw_4wings(geojson, day, nxt, temporal="DAILY", spatial="HIGH")
     records = []
     for entry in result.get("entries", []):
         if not isinstance(entry, dict):
@@ -110,6 +117,8 @@ def fetch_ais_day(geojson, day):
             if not isinstance(value, list):
                 continue
             for r in value:
+                if r.get("date") != day:   # [day, day+1) returns only `day`; guard anyway
+                    continue
                 records.append((
                     str(r.get("vesselId")),
                     r.get("date", day),
