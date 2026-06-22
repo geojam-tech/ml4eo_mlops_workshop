@@ -854,7 +854,7 @@
       "description": "Distinct vessels per month by flag (top 6 + Other). Watch the flag-of-convenience share (LBR, MHL, MLT, PAN) over the events.",
       "targets": [
         {
-          "rawQueryText": "SELECT strftime('%Y-%m', day) as month, COUNT(DISTINCT CASE WHEN flag='RUS' THEN vesselId END) as RUS, COUNT(DISTINCT CASE WHEN flag='LBR' THEN vesselId END) as LBR, COUNT(DISTINCT CASE WHEN flag='MHL' THEN vesselId END) as MHL, COUNT(DISTINCT CASE WHEN flag='MLT' THEN vesselId END) as MLT, COUNT(DISTINCT CASE WHEN flag='PAN' THEN vesselId END) as PAN, COUNT(DISTINCT CASE WHEN flag='GRC' THEN vesselId END) as GRC, COUNT(DISTINCT CASE WHEN flag NOT IN ('RUS','LBR','MHL','MLT','PAN','GRC') THEN vesselId END) as Other FROM port_vessel_days WHERE site='primorsk' GROUP BY month ORDER BY month",
+          "rawQueryText": "SELECT strftime('%Y-%m', day) as month, COUNT(DISTINCT CASE WHEN flag='RUS' THEN vesselId END) as RUS, COUNT(DISTINCT CASE WHEN flag='LBR' THEN vesselId END) as LBR, COUNT(DISTINCT CASE WHEN flag='MHL' THEN vesselId END) as MHL, COUNT(DISTINCT CASE WHEN flag='PAN' THEN vesselId END) as PAN, COUNT(DISTINCT CASE WHEN flag='MLT' THEN vesselId END) as MLT, COUNT(DISTINCT CASE WHEN flag='GRC' THEN vesselId END) as GRC, COUNT(DISTINCT CASE WHEN flag='GAB' THEN vesselId END) as GAB, COUNT(DISTINCT CASE WHEN flag='COK' THEN vesselId END) as COK, COUNT(DISTINCT CASE WHEN flag NOT IN ('RUS','LBR','MHL','PAN','MLT','GRC','GAB','COK') THEN vesselId END) as Other FROM port_vessel_days WHERE site='primorsk' GROUP BY month ORDER BY month",
           "refId": "A"
         }
       ],
@@ -868,7 +868,7 @@
   ],
   "time": {
     "from": "2021-02-01T00:00:00.000Z",
-    "to": "2023-02-28T00:00:00.000Z"
+    "to": "2024-03-01T00:00:00.000Z"
   },
   "timezone": "utc",
   "schemaVersion": 39,
