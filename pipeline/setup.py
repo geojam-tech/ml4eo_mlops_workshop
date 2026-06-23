@@ -35,7 +35,7 @@ AIS_SEED = DATA_DIR / "seed" / "ais_primorsk.parquet"
 WATER_MASK_SEED = DATA_DIR / "seed" / "water_mask_primorsk.tif"
 CHIPS_URL = os.getenv(
     "CHIPS_URL",
-    "https://drive.google.com/uc?id=1Mkc6gtTg6l_76rpH0AHL75O6JLHFrJZF",
+    "https://drive.google.com/uc?id=1a4A3mqNtsAS0Dcz3engungxIJqFlYH4z"
 )
 
 # ESA WorldCover classes that count as land (everything except permanent water,
